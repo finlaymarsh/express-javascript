@@ -1,12 +1,18 @@
-var express = require("express");
-var app = express();
+const express = require("express");
+
+const port = 3000;
+const app = express();
+
+app.use(function (req, res, next) {
+  const gmtDateTime = new Date().toUTCString();
+  console.log(
+    `[${req.hostname}]-[${gmtDateTime}] path: ${req.path} status: ${res.statusCode}`
+  );
+  next();
+});
 
 app.get("/", function (req, res) {
   res.send("Hello there!");
 });
 
-var server = app.listen(8000, function () {
-  var host = server.address().address;
-  var port = server.address().port;
-  console.log(`Example app listening at http://${host}:${port}`);
-});
+app.listen(port, () => console.log(`Listening on port: ${port}`));
